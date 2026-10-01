@@ -1,6 +1,7 @@
 package dev.latvian.mods.betteradvancedtooltips;
 
 import com.mojang.serialization.DynamicOps;
+import dev.latvian.mods.betteradvancedtooltips.core.mixin.DataComponentPatchAccessor;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.component.DataComponentType;
@@ -60,8 +61,8 @@ public class BATClientEventHandler {
 			if (BATConfig.CONFIG.componentTooltip.getAsBoolean()) {
 				var components = BuiltInRegistries.DATA_COMPONENT_TYPE;
 				var ops = registryAccess.createSerializationContext(NbtOps.INSTANCE);
-
-				for (var entry : stack.getComponentsPatch().entrySet()) {
+				var patch = ((DataComponentPatchAccessor) (Object) stack.getComponentsPatch()).getMap();
+				for (var entry : patch.entrySet()) {
 					var id = components.getKey(entry.getKey());
 
 					if (id != null) {
@@ -69,15 +70,15 @@ public class BATClientEventHandler {
 						line.append(BATIcons.PATCHED_COMPONENT);
 						line.append(BATIcons.SMALL_SPACE);
 
-						if (entry.getValue().isEmpty()) {
+						if (entry.getValue() != null) {
 							line.append(Component.literal("!"));
 						}
 
 						line.append(Component.literal(reduce(id)).withStyle(ChatFormatting.YELLOW));
 
-						if (entry.getValue().isPresent()) {
+						if (entry.getValue() != null) {
 							line.append(Component.literal("="));
-							var errors0 = appendComponentValue(ops, line, (DataComponentType) entry.getKey(), entry.getValue().get());
+							var errors0 = appendComponentValue(ops, line, (DataComponentType) entry.getKey(), entry.getValue());
 
 							if (!errors0.isEmpty()) {
 								lines.add(Component.literal(reduce(id) + " errored, see log").withStyle(ChatFormatting.DARK_RED));
@@ -110,28 +111,6 @@ public class BATClientEventHandler {
 				}
 			}
 		} else if (event.getFlags().hasShiftDown()) {
-			var fuel = BATConfig.CONFIG.fuelTooltip.getAsBoolean() ? stack.getBurnTime(null, mc.level.fuelValues()) : 0;
-
-			if (fuel > 0) {
-				var line = Component.empty();
-				line.append(BATIcons.FIRE);
-				line.append(BATIcons.SMALL_SPACE);
-				var txt = Component.empty().withStyle(ChatFormatting.GOLD);
-				txt.append("Fuel: ");
-
-				var s = String.valueOf(fuel / 20F);
-				txt.append(Component.literal(fuel + " t").withStyle(ChatFormatting.YELLOW));
-				txt.append(" | ");
-				txt.append(Component.literal((s.endsWith(".0") ? s.substring(0, s.length() - 2) : s) + " s").withStyle(ChatFormatting.YELLOW));
-				txt.append(" | ");
-
-				var i = String.valueOf(fuel / 200F);
-				txt.append(Component.literal((i.endsWith(".0") ? s.substring(0, i.length() - 2) : i) + "x").withStyle(ChatFormatting.YELLOW));
-
-				line.append(txt);
-				lines.add(line);
-			}
-
 			if (BATConfig.CONFIG.tagTooltip.getAsBoolean()) {
 				var tempTagNames = new LinkedHashMap<Identifier, TagInstance>();
 				var tEvent = new ItemTagIconsEvent(event, tempTagNames);
