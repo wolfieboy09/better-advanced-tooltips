@@ -8,7 +8,7 @@ version = "${version}"
 displayName = "Better Advanced Tooltips"
 description = "Adds tag, component and other tooltips to items in F3+H mode"
 authors = "latvian.dev"
-logoFile = "betteradvancedtooltips_logo.png"
+iconFile = "betteradvancedtooltips_logo.png"
 logoBlur = false
 
 [[dependencies.betteradvancedtooltips]]
