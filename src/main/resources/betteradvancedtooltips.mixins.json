@@ -4,7 +4,6 @@
 	"package": "dev.latvian.mods.betteradvancedtooltips.core.mixin",
 	"compatibilityLevel": "JAVA_21",
 	"mixins": [
-		"DataComponentPatchAccessor"
 	],
 	"client": [
 		"CreativeModeInventoryScreenMixin",

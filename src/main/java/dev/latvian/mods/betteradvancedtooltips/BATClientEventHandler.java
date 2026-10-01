@@ -1,7 +1,6 @@
 package dev.latvian.mods.betteradvancedtooltips;
 
 import com.mojang.serialization.DynamicOps;
-import dev.latvian.mods.betteradvancedtooltips.core.mixin.DataComponentPatchAccessor;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.component.DataComponentType;
@@ -61,8 +60,7 @@ public class BATClientEventHandler {
 			if (BATConfig.CONFIG.componentTooltip.getAsBoolean()) {
 				var components = BuiltInRegistries.DATA_COMPONENT_TYPE;
 				var ops = registryAccess.createSerializationContext(NbtOps.INSTANCE);
-				var patch = ((DataComponentPatchAccessor) (Object) stack.getComponentsPatch()).getMap();
-				for (var entry : patch.entrySet()) {
+				for (var entry : stack.getComponentsPatch().map.entrySet()) {
 					var id = components.getKey(entry.getKey());
 
 					if (id != null) {
