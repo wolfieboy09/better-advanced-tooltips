@@ -68,19 +68,15 @@ public class BATClientEventHandler {
 						line.append(BATIcons.PATCHED_COMPONENT);
 						line.append(BATIcons.SMALL_SPACE);
 
-						if (entry.getValue() != null) {
-							line.append(Component.literal("!"));
-						}
+						line.append(Component.literal("!"));
 
 						line.append(Component.literal(reduce(id)).withStyle(ChatFormatting.YELLOW));
 
-						if (entry.getValue() != null) {
-							line.append(Component.literal("="));
-							var errors0 = appendComponentValue(ops, line, (DataComponentType) entry.getKey(), entry.getValue());
+						line.append(Component.literal("="));
+						var errors0 = appendComponentValue(ops, line, (DataComponentType) entry.getKey(), entry.getValue());
 
-							if (!errors0.isEmpty()) {
-								lines.add(Component.literal(reduce(id) + " errored, see log").withStyle(ChatFormatting.DARK_RED));
-							}
+						if (!errors0.isEmpty()) {
+							lines.add(Component.literal(reduce(id) + " errored, see log").withStyle(ChatFormatting.DARK_RED));
 						}
 
 						lines.add(line);
